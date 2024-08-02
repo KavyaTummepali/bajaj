@@ -1,0 +1,40 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const app = express();
+app.use(bodyParser.json());
+
+app.post('/bfhl', (req, res) => {
+    try {
+        const data = req.body.data || [];
+        const numbers = data.filter(x => /^\d+$/.test(x));
+        const alphabets = data.filter(x => /^[a-zA-Z]+$/.test(x));
+        const highestAlphabet = alphabets.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).pop() || "";
+
+        const response = {
+            is_success: true,
+            user_id: "kavya24",
+            email: "tt9968@srmist.edu.in",
+            roll_number: "RA2111003010638",
+            numbers: numbers,
+            alphabets: alphabets,
+            highest_alphabet: highestAlphabet ? [highestAlphabet] : []
+        };
+
+        res.json(response);
+    } catch (e) {
+        res.json({
+            is_success: false,
+            error: e.toString()
+        });
+    }
+});
+
+app.get('/bfhl', (req, res) => {
+    res.json({ operation_code: 1 });
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
